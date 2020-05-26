@@ -8,23 +8,21 @@
  * 函数表达式遵循先定义后使用，并不会进行变量提升
 */
 
-const tableDOM = document.createElement("table");
-const divDOM = $("table-data-wrap")
 
 
-function $(id){
-    //谁调用这个方法值就返回给谁
-   return document.getElementById(id);
+
+const tableDOM = window.Utils.createEl("table");
+const divDOM = window.Utils.$("table-data-wrap")
+
+let styles = {
+        "border":"10",
+        "cellpadding":"0",
+        "cellspacing":"0",
+        "id":"table-data-wrap",
+        "width":"100%",
 }
-
-
-
-tableDOM.width = "100%";
-tableDOM.setAttribute("border","10");
-tableDOM.setAttribute("cellpadding","0");
-tableDOM.setAttribute("cellspacing","0");
-tableDOM.setAttribute("id","table-data-wrap")
-
+window.Utils.setAttr(tableDOM,styles);
+   
 tableDOM.innerHTML = `<thead>
                         <tr>
                             <th>头像</th>
