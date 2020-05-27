@@ -8,9 +8,6 @@
  * 函数表达式遵循先定义后使用，并不会进行变量提升
 */
 
-
-
-
 const tableDOM = window.Utils.createEl("table");
 const divDOM = window.Utils.$("table-data-wrap")
 
@@ -22,19 +19,24 @@ let styles = {
         "width":"100%",
 }
 window.Utils.setAttr(tableDOM,styles);
-   
-tableDOM.innerHTML = `<thead>
-                        <tr>
-                            <th>头像</th>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>年龄</th>
-                            <th>手机号</th>
-                            <th>国籍</th>
-                            <th width="200">爱好</th>
-                            <th>头衔</th>
-                            <th>操作</th>
-                        </tr>
-                     </thead>`
+
+let tableHeaderData = [
+    {label: "头像"},
+    {label: "姓名"},
+    {label: "性别"},
+    {label: "年龄"},
+    {label: "手机号"},
+    {label: "国籍"},
+    {label: "爱好",width:"200"},
+    {label: "头衔"},
+    {label: "操作"},
+]
+let innerHTMLData = `<thead><tr>`
+tableHeaderData.forEach( (item,index,data)=>{
+    item.width?innerHTMLData += `<th width=${item.width}>${item.label}</th>`:innerHTMLData += `<th >${item.label}</th>`
+})
+innerHTMLData+=`</tr></thead>`
+tableDOM.innerHTML = innerHTMLData;
+
 
 divDOM.appendChild(tableDOM);

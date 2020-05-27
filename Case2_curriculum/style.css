@@ -618,7 +618,7 @@
     height: 100%;
     width: 40px;
     border: none;
-    background: url(../images/icon-search-btn.png) no-repeat;
+    background: url(./image/icon-search-btn.png) no-repeat;
     outline:none;
     font-size: 0;
     cursor: pointer;
