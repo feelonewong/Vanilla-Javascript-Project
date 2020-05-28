@@ -38,5 +38,4 @@ tableHeaderData.forEach( (item,index,data)=>{
 innerHTMLData+=`</tr></thead>`
 tableDOM.innerHTML = innerHTMLData;
 
-
 divDOM.appendChild(tableDOM);
