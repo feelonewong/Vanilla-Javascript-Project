@@ -1,15 +1,32 @@
-
 "use strict";
 
 /**
- * 简单变量使用let 
+ * 简单变量使用let
  * 复杂变量使用const
  * 具名函数和函数表达式区别：第一个有一个变量提升的过程，无论你在哪里定义 都是默认最先执行
  * 函数表达式遵循先定义后使用，并不会进行变量提升
-*/
+ */
 
+function handlerFaceList(value) {
+    $.post(
+        "http://www.web-jshtml.cn/api/javascriptApi/faceList/",
+        JSON.stringify({}),
+        function (data) {
+            handlerFaceListCallback(data);
+        }, "json");
+}
+
+
+/*获取表格DOM*/
 const tableDOM = window.Utils.createEl("table");
-const divDOM = window.Utils.$("table-data-wrap")
+const divDOM = window.Utils.$("table-data-wrap");
+/*打开form表单的操作信息按钮*/
+const addInfoButton = window.Utils.getClassName('add-info-button')[0];
+const closeDialog = window.Utils.getClassName('close-dialog')[0];
+/*form表单的class*/
+const infoDialog = window.Utils.$("info-dialog");
+const faceView = document.querySelector(".face-view");
+const faceViewList = document.querySelector(".face-view-list");
 
 let styles = {
     "border": "10",
@@ -17,115 +34,67 @@ let styles = {
     "cellspacing": "0",
     "id": "table-data-wrap",
     "width": "100%",
-}
+};
 window.Utils.setAttr(tableDOM, styles);
 
-
-let innerHTMLData = `<thead><tr>`
+let innerHTMLData = `<thead><tr>`;
 tableHeaderData.forEach((item, index, data) => {
-    item.width ? innerHTMLData += `<th width=${item.width}>${item.label}</th>` : innerHTMLData += `<th >${item.label}</th>`
-})
-innerHTMLData += `</tr></thead>`
+    item.width ? innerHTMLData += `<th width=${item.width}>${item.label}</th>` : innerHTMLData += `<th >${item.label}</th>`;
+});
+innerHTMLData += `</tr></thead>`;
 
-
-let tableBodyHTML = `<tbody>`
-let trHTML = ``
-for (let i = 0; i < tableTbodyData.length; i++) {
-    const rowData = tableTbodyData[i];
-    trHTML += "<tr>"
-    /*头像*/
-    trHTML += `<td>
-        <div class="face">
-            <span class="icon-${rowData.face.gender} gender"></span>
-            <img src=${rowData.face.img}>
-            </div>
-        </td>
-    `
-    /*姓名*/
-    trHTML += `
-    <td>
-        <div class="people-name">
-            <h4 class="name">${rowData.name.trueName}</h4>
-        <span class="nickname option-05 fs-12">昵称：${rowData.name.nickname}</span>
-        </div>
-    </td>`
-
-    /*性别*/
-    trHTML += `
-        <td>
-        <div class="gender-wrap">
-            <span class="gender icon-girl ${rowData.face.gender === 'girl' ? '' : 'option-05'}" ></span>
-            <span class="gender icon-boy  ${rowData.face.gender === 'boy' ? '' : 'option-05'}"></span>
-        </div>
-    </td>
-    `
-    /*年龄*/
-    trHTML += `
-        <td>
-            <div class="age text-center">
-                <p>${rowData.age.number}</p>
-                <span class="option-05 fs-12">（单身狗）</span>
-            </div>
-        </td>`
-    /*电话号码*/
-    trHTML += `
-        <td>
-            <div class="phone">
-                ${rowData.phone.code}<span class="option-05">（${rowData.country.name}）</span><br />
-                ${rowData.phone.number}
-            </div>
-        </td>`
-
-    /*国籍*/
-    trHTML += `
-    <td>
-        <div>
-            <img src="${rowData.country.National_flag}" alt="中国">
-            <p class="country-name" style="color: ${rowData.country.color};">${rowData.country.name}</p>
-        </div>
-    </td>
-    `
-    let likeHTML = ``
-    rowData.like.forEach((item,index,data)=>{
-        likeHTML+=`<span style="background-color: ${item.color};">${item.tag}</span>`
-
-    })
-    /*爱好*/
-    trHTML += `
-    <td>
-        <div class="likes">
-         ${likeHTML}
-        </div>
-    </td>`
-    /*头衔*/
-    trHTML += ` 
-        <td>
-        <div class="grade">
-            <span class="role-name">${rowData.rank.name}</span>
-            <div class="grade-wrap icon-grade">
-                <div class="grade-high icon-grade" style="width: ${rowData.rank.level*16.6}%;"></div>
-            </div>
-        </div>
-        </td>`
-    /*操作*/
-    trHTML+=`
-        <td>
-            <div class="operation">
-                <a href="javascript: void(0);" class="operation-btn">设置</a>
-                <ul class="links">
-                    <a href="javascript: void(0);">编辑</a>
-                    <a href="javascript: void(0);">删除</a>
-                    <a href="javascript: void(0);">锁定</a>
-                    <a href="javascript: void(0);">收起</a>
-                </ul>
-            </div>
-        </td>
-    `
-    trHTML += "</tr>"
-
-}
-tableBodyHTML += `${trHTML}</tbody>`
-
+let tableBodyHTML = `<tbody>`;
+tableBodyHTML += `${createTbodyData()}</tbody>`;
 tableDOM.innerHTML = tableBodyHTML + innerHTMLData;
 
 divDOM.appendChild(tableDOM);
+
+/**
+ * 打开、关闭表单的事件处理
+ * */
+window.Utils.addEvent(addInfoButton, "click", function () {
+    infoDialog.classList.add("dialog-show");
+});
+window.Utils.addEvent(closeDialog, 'click', function () {
+    infoDialog.classList.remove('dialog-show');
+    faceViewList.innerHTML = "";
+});
+
+/**
+ * 头像事件处理
+ * */
+window.Utils.addEvent(faceView, 'click', function () {
+    handlerFaceList();
+});
+
+function handlerFaceListCallback(requestData) {
+    let {data} = requestData;
+    let liHtml = ``;
+    for (let key of data) {
+        liHtml += `<li><img  src="${key}" /></li>`;
+    }
+    ;
+    faceViewList.innerHTML = liHtml;
+}
+
+/**
+ * 点击头像list更换
+ * */
+window.Utils.addEvent(faceViewList, 'click', function (element) {
+    let nodeName = element.target.nodeName.toLowerCase();
+    let imgHTML = window.Utils.createEl('img');
+    const getImg = faceView.getElementsByTagName('img')[0];
+    if (nodeName == 'img') {
+        imgHTML.src = element.target.getAttribute('src');
+    }
+    if (nodeName == 'li') {
+        let imgHTMLSrc = element.target.getElementsByTagName('img')[0].src;
+        imgHTML.src = imgHTMLSrc;
+    }
+
+    if(getImg){
+        getImg.src=imgHTML.src
+    }else {
+        faceView.appendChild(imgHTML);
+    }
+});

@@ -414,6 +414,8 @@
     border-bottom: 1px solid rgba(255, 255, 255, .08);
   }
   i[class^=icon] {
+      background-color: #fff;
+      border-radius: 3px;
     display: inline-block;
     background-repeat: no-repeat;
   }
@@ -729,7 +731,7 @@
 .button-fixed i {
   width: 18px;
   height: 18px;
-  background-image: url(../images/icon-001.png);
+  background-image: url("setting.png");
 }
 .button-fixed li { margin-top: 6px; }
 .button-fixed ul { display: none; }
@@ -758,7 +760,7 @@
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: #696868;
+  color: #FFF;
 }
 .form-content {
   position: relative;
