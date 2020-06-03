@@ -24,11 +24,13 @@
          * getElement
          *  node{params}String
          */
-        function createEl(node) {
-            if (typeof node != "string") {
-                throw new Error("node is must be string");
+        function createEl(node,attr) {
+            const dom = document.createElement(node);
+            if(attr){
+                Utils.setAttr(dom,attr);
+                
             }
-            return document.createElement(node);
+            return dom;
         }
 
         window.Utils.createEl = createEl;

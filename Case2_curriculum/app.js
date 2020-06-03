@@ -63,13 +63,20 @@ window.Utils.addEvent(faceViewList, 'click', function (element) {
     let nodeName = element.target.nodeName.toLowerCase();
     let imgHTML = window.Utils.createEl('img');
     const getImg = faceView.getElementsByTagName('img')[0];
-    if (nodeName == 'img') {
-        imgHTML.src = element.target.getAttribute('src');
+    if(faceSave){
+        faceSave.classList.remove("active")
     }
     if (nodeName == 'li') {
         let imgHTMLSrc = element.target.getElementsByTagName('img')[0].src;
         imgHTML.src = imgHTMLSrc;
+        faceSave = element.target
     }
+
+    if (nodeName == 'img') {
+        imgHTML.src = element.target.getAttribute('src');
+        faceSave = element.target.parentNode;
+    }
+    faceSave.classList.add("active")
     /**
      * 更新头像
     */
@@ -96,3 +103,8 @@ window.Utils.addEvent(faceDelButton, 'click', function (e) {
     }
     faceUpdate(params)
 })
+usernameInput.onblur = function(){
+    window.UI.$message({
+        messageText:"姓名不能为空"
+    });
+}
